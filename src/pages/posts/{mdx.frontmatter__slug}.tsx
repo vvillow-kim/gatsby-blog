@@ -1,27 +1,53 @@
 import * as React from "react";
-import { graphql } from "gatsby";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { graphql, HeadProps, PageProps } from "gatsby";
+import { getImage } from "gatsby-plugin-image";
 import Layout from "../../components/Layout";
-import Seo from "../../components/seo";
+import Seo from "../../components/Seo";
+import SameSeriesPosts from "../../components/SameSeriesPosts";
+import MdxContent from "../../components/MdxContent";
+import highlightCurrentHeading from "../../helper/highlightCurrentHeading";
+import { PostFrontmatter } from "../../types";
 
-type PostProps = {
-  data: any;
-  children: any;
+type PostDetailData = {
+  mdx: {
+    frontmatter: PostFrontmatter;
+    sameSeriesPosts:
+      | null
+      | {
+          frontmatter: Pick<PostFrontmatter, "title" | "slug">;
+        }[];
+    excerpt: string;
+  };
 };
 
-const BlogPost = ({ data, children }: PostProps) => {
-  const image = getImage(data.mdx.frontmatter.hero_image);
+const BlogPost = ({ data, children }: PageProps<PostDetailData>) => {
+  const ref = React.useRef<HTMLDivElement>();
+  const { frontmatter, sameSeriesPosts } = data.mdx;
+  const { title, slug, date, series } = frontmatter;
+
+  React.useEffect(() => {
+    const headingElements = ref.current?.querySelectorAll<HTMLElement>(
+      ".md h1, .md h2, .md h3, .md h4, .md h5, d h6"
+    );
+
+    const observer = new IntersectionObserver(
+      () => highlightCurrentHeading(ref, headingElements),
+      { rootMargin: "0px 0px -90% 0px", threshold: [0, 1.0] }
+    );
+
+    // `headingElements` 들에게 위에서 작성한 옵저버를 적용한다.
+    headingElements?.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <Layout pageTitle={data.mdx.frontmatter.title}>
-      <p>Posted: {data.mdx.frontmatter.date}</p>
-      <GatsbyImage alt={data.mdx.frontmatter.hero_image_alt} image={image} />
-      <p>
-        Photo Credit:{" "}
-        <a href={data.mdx.frontmatter.hero_image_credit_link}>
-          {data.mdx.frontmatter.hero_image_credit_text}
-        </a>
-      </p>
-      {children}
+    <Layout pageTitle={title}>
+      <p>Posted: {date}</p>
+      <SameSeriesPosts name={series} data={sameSeriesPosts} current={slug} />
+      <MdxContent ref={ref as React.RefObject<HTMLDivElement>}>
+        {children}
+      </MdxContent>
     </Layout>
   );
 };
@@ -32,15 +58,23 @@ export const query = graphql`
       frontmatter {
         title
         date(formatString: "YYYY-MM-DD")
-        hero_image_alt
-        hero_image_credit_link
-        hero_image_credit_text
-        hero_image {
+        tags
+        series
+        heroImageAlt
+        heroImage {
           childImageSharp {
             gatsbyImageData
           }
         }
       }
+      sameSeriesPosts {
+        frontmatter {
+          title
+          slug
+        }
+      }
+      excerpt
+      tableOfContents
     }
   }
 `;

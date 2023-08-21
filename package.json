@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "willow-s-evolution-chamber",
-  "author": "yanggwi",
+  "author": "willow.kim",
   "keywords": [
     "gatsby"
   ],
@@ -18,6 +18,7 @@
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
     "babel-plugin-styled-components": "^2.1.4",
+    "fs-extra": "^11.1.1",
     "gatsby": "^5.11.0",
     "gatsby-plugin-google-analytics": "^5.11.0",
     "gatsby-plugin-google-gtag": "^5.11.0",
@@ -27,17 +28,25 @@
     "gatsby-plugin-sharp": "^5.11.0",
     "gatsby-plugin-sitemap": "^6.11.0",
     "gatsby-plugin-styled-components": "^6.11.0",
+    "gatsby-remark-autolink-headers": "^6.11.0",
+    "gatsby-remark-images": "^7.11.0",
+    "gatsby-remark-prismjs": "^7.11.0",
     "gatsby-source-filesystem": "^5.11.0",
     "gatsby-transformer-sharp": "^5.11.0",
+    "mdast-util-toc": "5",
+    "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^6.0.7"
+    "remark-gfm": "^1.0.0",
+    "styled-components": "^6.0.7",
+    "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@types/styled-components": "^5.1.26",
+    "gh-pages": "^6.0.0",
     "prettier": "2.8.1",
     "typescript": "^5.1.6"
   }

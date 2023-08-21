@@ -1,11 +1,47 @@
 ---
-title: "Another Post"
+title: "Stick Order Test"
 date: "2021-07-24"
 slug: "another-post"
-hero_image: "./image-01.jpg"
-hero_image_alt: "A grey and white pitbull wading happily in a pool"
-hero_image_credit_text: "Anthony Duran"
-hero_image_credit_link: "https://unsplash.com/photos/eLUBGqKGdE4"
+heroImage: "./bug.png"
+heroImageAlt: "A grey and white pitbull wading happily in a pool"
+tags: ["Example", "tag_test"]
+series: "Test"
 ---
+
+오늘은 처음으로 30분 이내에 풀지 못한 문제를 만났다.
+
+```python:title=solution.py
+def good_solution(self, nums: list[int]) -> list[int]:
+    length = len(nums)
+    out = [1] * length
+    pre = 1
+    post = 1
+
+    for i in range(len(nums)):
+        out[i] *= pre
+        pre *= nums[i]
+
+        out[length - i - 1] *= post
+        post *= nums[-(i+1)]
+
+    return out
+
+```
+
+# 목차1
+
+어쩌구 저쩌구
+
+## 목차1-1
+
+샬라샬라
+
+![Alt message](./image-01.jpg)
+
+# 목차2
+
+갸갸갸
+
+![Alt message](./image-01.jpg)
 
 Here's another post! It's even better than the first one!

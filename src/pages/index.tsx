@@ -1,21 +1,44 @@
 import * as React from "react";
-import type { HeadFC, PageProps } from "gatsby";
 import Layout from "../components/Layout";
-import { StaticImage } from "gatsby-plugin-image";
-import Seo from "../components/seo";
+import Seo from "../components/Seo";
+import { Link, graphql } from "gatsby";
 
-const IndexPage: React.FC<PageProps> = () => {
+const BlogPage = ({ data }: any) => {
   return (
-    <Layout pageTitle={"Home Page"}>
-      <p>I'm making this by following the Gatsby Tutorial.</p>
-      <StaticImage
-        src="../images/dog.webp"
-        alt="Clifford, a reddish-brown pitbull, posing on a couch and looking stoically at the camera"
-      />
+    <Layout pageTitle="">
+      <ul>
+        {data.allMdx.nodes.map((node: any) => (
+          <article key={node.id}>
+            <h2>
+              <Link to={`/posts/${node.frontmatter.slug}`}>
+                {node.frontmatter.title}
+              </Link>
+            </h2>
+            <p>Posted: {node.frontmatter.date}</p>
+            <p>{node.excerpt}</p>
+          </article>
+        ))}
+      </ul>
     </Layout>
   );
 };
 
-export const Head: HeadFC = () => <Seo title="Home Page" />;
+export const query = graphql`
+  query {
+    allMdx(sort: { frontmatter: { date: DESC } }) {
+      nodes {
+        frontmatter {
+          date(formatString: "YYYY-MM-DD")
+          title
+          slug
+        }
+        id
+        excerpt
+      }
+    }
+  }
+`;
 
-export default IndexPage;
+export const Head = () => <Seo title="My Blog Posts" />;
+
+export default BlogPage;
